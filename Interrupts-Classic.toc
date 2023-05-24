@@ -1,12 +1,10 @@
 ## Interface: 11403
 ## Author: Luaerror
 ## Version: 1.0
-## Title: |cffb3ff19Interrupts|r
-## Notes: Dispel announcer
-## Website: https://github.com/pedrozc90/Interrupts
-## X-Website: https://github.com/pedrozc90/Interrupts
+## Title: |cffb3ff19Interrupts - Classic|r
+## Notes: Interrupt announcer
+## Website: https://github.com/pedrozc90/interrupts
+## X-Website: https://github.com/pedrozc90/interrupts
 ## X-Maintainer: pedrozc90
-## X-LuaUI-ProjectID: 1
-## X-LuaUI-ProjectFolders: Interrupts
 
-Interrupts.lua
+init.xml
