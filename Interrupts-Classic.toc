@@ -1,6 +1,6 @@
-## Interface: 11403
+## Interface: 11500
 ## Author: Luaerror
-## Version: 1.0
+## Version: 1.0.0
 ## Title: |cffb3ff19Interrupts - Classic|r
 ## Notes: Interrupt announcer
 ## Website: https://github.com/pedrozc90/interrupts
