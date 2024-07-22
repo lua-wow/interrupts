@@ -1,5 +1,6 @@
 local _, ns = ...
 
+-- Blizzard
 local IsInInstance = _G.IsInInstance
 local IsInGroup = _G.IsInGroup
 local IsInRaid = _G.IsInRaid
@@ -9,15 +10,14 @@ local COMBATLOG_FILTER_ME = _G.COMBATLOG_FILTER_ME
 local COMBATLOG_FILTER_MINE = _G.COMBATLOG_FILTER_MINE
 local COMBATLOG_FILTER_MY_PET = _G.COMBATLOG_FILTER_MY_PET
 
+-- Constants
+local STRING_INTERRUPT = "Interrupted %s %s!"
+
 ----------------------------------------------------------------
 -- Interrupt Announce
 ----------------------------------------------------------------
-local STRING_INTERRUPT = "Interrupted %s %s!"
 
--- variables used to prevent AoE spam interrupts
-local lastTimestamp, lastSpellID = 0, nil
-
--- configure group messages
+-- configurations
 local chatChannels = {
     ["SAY"] = true,
     ["PARTY"] = true,
@@ -27,6 +27,9 @@ local chatChannels = {
 }
 
 local DisplaySpellLink = true
+
+-- variables used to prevent AoE spam interrupts
+local lastTimestamp, lastSpellID = 0, nil
 
 -- create a possesion form by appending ('s) to the string, unless it ends
 -- with s, x or z, in which only (') is added.
@@ -90,7 +93,7 @@ function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
         -- spell standard
         local spellID, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool = select(12, CombatLogGetCurrentEventInfo())
         
-        -- do not announce self interrputs (quake from mythic affixes)
+        -- ignore self interrupts (quake from mythic affixes)
         if (sourceGUID == destGUID and destGUID == self.guid) then return end
 
         -- prevents spam announcements

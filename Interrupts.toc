@@ -1,0 +1,11 @@
+## Interface: 11503, 20504, 30403, 40400, 100207
+## Author: Luaerror
+## Version: 1.0.0
+## Title: |cffff8000Interrupts|r
+## Notes: Interrupt announcer
+## IconTexture: Interface\ICONS\Ability_Priest_Silence
+
+## X-Website: https://github.com/wow-lua/interrupts
+## X-Maintainer: Luaerror
+
+init.xml
