@@ -1,18 +1,21 @@
-FILENAME := interrupts.zip
-EXCLUDES := '.git/*' '.github/*' '.gitignore' '.gitattributes' Makefile
+# Makefile to create a .zip archive of the repository
 
-.PHONY: changelog
-changelog:
-	@git log -1 --pretty=%B | head -c -1
+# Name of the zip file
+FILENAME := repository.zip
 
-.PHONY: zip
-zip:
-	@echo "Creating zip file..."
-	@zip -r $(FILENAME) * -x $(addprefix -x ,$(EXCLUDES))
-	@echo "$(FILENAME) created successfully."
+# Default target
+zip: $(FILENAME)
 
-.PHONY: clean
+# Create the .zip archive
+$(FILENAME):
+	@echo "Creating $(FILENAME)..."
+	@zip -r $(FILENAME) . -x@exclude.lst
+	@echo "$(FILENAME) created."
+
+# Clean target to remove the .zip file
 clean:
 	@echo "Cleaning up..."
 	@rm -f $(FILENAME)
-	@echo "Cleanup complete."
+	@echo "Cleaned."
+
+.PHONY: zip
