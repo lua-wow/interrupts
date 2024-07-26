@@ -1,6 +1,6 @@
-## Interface: 11503, 20504, 30403, 40400, 100207
+## Interface: 11503, 20504, 30403, 40400, 100207, 110000
 ## Author: Luaerror
-## Version: 1.1.0
+## Version: 1.2.0
 ## Title: |cffff8000Interrupts|r
 ## Notes: Interrupt announcer
 ## IconTexture: Interface\ICONS\Ability_Priest_Silence
