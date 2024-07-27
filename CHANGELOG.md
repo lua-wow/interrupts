@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2024-07-27
+
 ### Changed
 
 -   Fixed taint. We can not use SAY chat cannel to announce interrupts on the outdoor world.
