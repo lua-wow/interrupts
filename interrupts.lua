@@ -10,23 +10,20 @@ local COMBATLOG_FILTER_ME = _G.COMBATLOG_FILTER_ME
 local COMBATLOG_FILTER_MINE = _G.COMBATLOG_FILTER_MINE
 local COMBATLOG_FILTER_MY_PET = _G.COMBATLOG_FILTER_MY_PET
 
+local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
+local LE_PARTY_CATEGORY_INSTANCE = _G.LE_PARTY_CATEGORY_INSTANCE or 2
+
 -- Constants
-local STRING_INTERRUPT = "Interrupted %s %s!"
+local INTERRUPT = "Interrupted %s %s!"
 
 ----------------------------------------------------------------
 -- Interrupt Announce
 ----------------------------------------------------------------
 
 -- configurations
-local chatChannels = {
-    ["SAY"] = true,
-    ["PARTY"] = true,
-    ["RAID"] = true,
-    ["RAID_WARNNING"] = false,
-    ["INSTANCE_CHAT"] = false
+local cfg = {
+    ["spell_link"] = true
 }
-
-local DisplaySpellLink = true
 
 -- variables used to prevent AoE spam interrupts
 local lastTimestamp, lastSpellID = 0, nil
@@ -56,32 +53,31 @@ function Interrupt:PLAYER_LOGIN()
 end
 
 function Interrupt:PLAYER_ENTERING_WORLD()
-    local _, instanceType = IsInInstance()
-    local inInstance, inGroup, inRaid = IsInGroup(LE_PARTY_CATEGORY_INSTANCE), IsInGroup(), IsInRaid()
+    local isInInstance, instanceType = IsInInstance()
+    local inInstance, inGroup, inRaid = IsInGroup(LE_PARTY_CATEGORY_INSTANCE), IsInGroup(LE_PARTY_CATEGORY_HOME), IsInRaid()
 
-    -- check group status
-    if (instanceType == "raid") or (instanceType == "party") then
-        if (inInstance) then
-            self.chatType = "INSTANCE_CHAT"
-        elseif (inRaid) then
+    if isInInstance then
+        if inRaid then
             self.chatType = "RAID"
-        elseif (inGroup) then
-            self.chatType = "PARTY"
         else
             self.chatType = "SAY"
         end
+    elseif inRaid then
+        self.chatType = "RAID"
+    elseif inGroup then
+        self.chatType = "PARTY"
+    elseif inInstance then
+        self.chatType = "INSTANCE_CHAT"
     else
-        self.chatType = "SAY"
-    end
-
-    -- check if channel is enable for announcing
-    if (not chatChannels[self.chatType]) then
-        self.chatType = "SAY"
+        -- chat type "SAY" requires a hardware evet when in the outdoor world
+        self.chatType = nil
     end
 end
 
-function Interrupt:SendChatMessage(destName, extraSpellText)
-    SendChatMessage(STRING_INTERRUPT:format(StringPossesion(destName or "?"), extraSpellText), self.chatType)
+function Interrupt:SendChatMessage(destName, spellText)
+    if not self.chatType then return end
+    local text = INTERRUPT:format(StringPossesion(destName or "?"), spellText)
+    SendChatMessage(text, self.chatType)
 end
 
 function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
@@ -106,7 +102,7 @@ function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
         if (CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_ME) or
             CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MINE) or
             CombatLog_Object_IsA(sourceFlags, COMBATLOG_FILTER_MY_PET)) then
-            if (DisplaySpellLink) then
+            if (cfg.spell_link) then
                 local extraSpellLink = GetSpellLink(extraSpellID)
                 self:SendChatMessage(destName, extraSpellLink or extraSpellName)
             else
