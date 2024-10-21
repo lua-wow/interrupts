@@ -5,7 +5,7 @@
 ## Notes: Interrupt announcer
 ## IconTexture: Interface\ICONS\Ability_Priest_Silence
 
-## X-Website: https://github.com/wow-lua/interrupts
+## X-Website: https://github.com/lua-wow/interrupts
 ## X-Maintainer: Luaerror
 
 init.xml
