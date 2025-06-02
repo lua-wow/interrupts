@@ -69,7 +69,7 @@ function Interrupt:PLAYER_ENTERING_WORLD()
     elseif inInstance then
         self.chatType = "INSTANCE_CHAT"
     else
-        -- chat type "SAY" requires a hardware evet when in the outdoor world
+        -- chat type "SAY" requires a hardware event when in the outdoor world
         self.chatType = nil
     end
 end
