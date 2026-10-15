@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-14
+
 ### Changed
 
 -   Interface for Classic Era, TBC, WotLK and MoP only (the combat log can't be read on Retail)
