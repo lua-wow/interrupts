@@ -1,5 +1,3 @@
-local _, ns = ...
-
 -- Blizzard
 local IsInInstance = _G.IsInInstance
 local IsInGroup = _G.IsInGroup
@@ -7,6 +5,7 @@ local IsInRaid = _G.IsInRaid
 local GetSpellLink = C_Spell and C_Spell.GetSpellLink or _G.GetSpellLink
 local CombatLogGetCurrentEventInfo = C_CombatLog.GetCurrentEventInfo
 local CombatLog_Object_IsA = C_CombatLog.DoesObjectMatchFilter
+local SendChatMessage = C_ChatInfo.SendChatMessage
 local COMBATLOG_FILTER_ME = _G.COMBATLOG_FILTER_ME
 local COMBATLOG_FILTER_MINE = _G.COMBATLOG_FILTER_MINE
 local COMBATLOG_FILTER_MY_PET = _G.COMBATLOG_FILTER_MY_PET
@@ -41,6 +40,7 @@ end
 local Interrupt = CreateFrame("Frame")
 Interrupt:RegisterEvent("PLAYER_LOGIN")
 Interrupt:RegisterEvent("PLAYER_ENTERING_WORLD")
+Interrupt:RegisterEvent("GROUP_ROSTER_UPDATE")
 Interrupt:SetScript("OnEvent", function(self, event, ...)
     -- call one of the event handlers
     self[event](self, ...)
@@ -53,8 +53,8 @@ function Interrupt:PLAYER_LOGIN()
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 end
 
-function Interrupt:PLAYER_ENTERING_WORLD()
-    local isInInstance, instanceType = IsInInstance()
+function Interrupt:UpdateChatType()
+    local isInInstance = IsInInstance()
     local inInstance, inGroup, inRaid = IsInGroup(LE_PARTY_CATEGORY_INSTANCE), IsInGroup(LE_PARTY_CATEGORY_HOME), IsInRaid()
 
     if isInInstance then
@@ -75,6 +75,14 @@ function Interrupt:PLAYER_ENTERING_WORLD()
     end
 end
 
+function Interrupt:PLAYER_ENTERING_WORLD()
+    self:UpdateChatType()
+end
+
+function Interrupt:GROUP_ROSTER_UPDATE()
+    self:UpdateChatType()
+end
+
 function Interrupt:SendChatMessage(destName, spellText)
     if not self.chatType then return end
     local text = INTERRUPT:format(StringPossesion(destName or "?"), spellText)
@@ -82,14 +90,11 @@ function Interrupt:SendChatMessage(destName, spellText)
 end
 
 function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
-    local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
-        destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
+    local timestamp, eventType, _, sourceGUID, _, sourceFlags, _, destGUID, destName, _, _,
+        spellID, _, _, extraSpellID, extraSpellName = CombatLogGetCurrentEventInfo()
 
     -- check if event type was a spell interrupt
     if (eventType == "SPELL_INTERRUPT") then
-        -- spell standard
-        local spellID, spellName, spellSchool, extraSpellID, extraSpellName, extraSchool = select(12, CombatLogGetCurrentEventInfo())
-        
         -- ignore self interrupts (quake from mythic affixes)
         if (sourceGUID == destGUID and destGUID == self.guid) then return end
 
@@ -112,5 +117,3 @@ function Interrupt:COMBAT_LOG_EVENT_UNFILTERED()
         end
     end
 end
-
-ns.Interrupts = Interrupts

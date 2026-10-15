@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+-   Interface for Classic Era, TBC, WotLK and MoP only (the combat log can't be read on Retail)
+-   `C_ChatInfo.SendChatMessage` instead of the deprecated global
+-   Announce channel is updated when the group changes (`GROUP_ROSTER_UPDATE`)
+-   Removed dead code; added `.luacheckrc` and `make check`
+
 ## [1.3.0] - 2024-07-27
 
 ### Changed
