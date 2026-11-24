@@ -29,11 +29,16 @@ read_globals = {
     'COMBATLOG_FILTER_MY_PET',
     'LE_PARTY_CATEGORY_HOME',
     'LE_PARTY_CATEGORY_INSTANCE',
+    'WOW_PROJECT_ID',
+    'WOW_PROJECT_MAINLINE',
 
     -- API
     'CreateFrame',
+    'GetTime',
     'IsInGroup',
     'IsInInstance',
     'IsInRaid',
+    'issecretvalue',
+    'UnitCanAttack',
     'UnitGUID',
 }
